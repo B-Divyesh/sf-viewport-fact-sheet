@@ -9,9 +9,9 @@
     "build:helper": "node scripts/build-helper.mjs && node scripts/write-helper-types.mjs",
     "build:site": "vite build --config site/vite.config.ts",
     "build": "node scripts/clean.mjs && npm run build:extension && npm run build:helper && npm run build:site && node scripts/package-release.mjs",
-    "test": "vitest run && npm run build && playwright test",
+    "test": "vitest run && npm run build && npm run test:e2e",
     "test:unit": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "xvfb-run -a playwright test"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",

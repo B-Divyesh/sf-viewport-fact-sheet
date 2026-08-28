@@ -58,7 +58,7 @@
     </section>
     <section class="playwright" id="playwright" aria-labelledby="playwright-title">
       <div><p class="section-no">04 / Same facts in tests</p><h2 id="playwright-title">Ask Playwright what a user can reach.</h2><p>The companion helper runs the same inspection engine against a locator. It returns the report or throws with exact reason codes.</p><div class="helper-links"><a href="/downloads/viewport-fact-sheet-playwright.mjs" download>Download single-file helper</a><a href="/downloads/viewport-fact-sheet-playwright.zip" download>Helper + types (.zip)</a></div></div>
-      <div class="code-window"><header><span></span><span></span><span></span><b>checkout.spec.ts</b><button type="button" id="copy-code">Copy</button></header><pre><code id="code-sample">import { getViewportFactSheet } from
+      <div class="code-window"><header><span></span><span></span><span></span><b>checkout.spec.ts</b><button type="button" id="copy-code">Copy</button></header><pre tabindex="0" aria-label="Playwright helper example"><code id="code-sample">import { getViewportFactSheet } from
   './viewport-fact-sheet-playwright.mjs';
 
 const facts = await getViewportFactSheet(

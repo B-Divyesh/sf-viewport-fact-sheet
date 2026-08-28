@@ -38,6 +38,36 @@ test('mobile layout stays usable at 390px', async ({ page }) => {
   const bodyWidth = await page.locator('body').evaluate((body) => body.scrollWidth);
   expect(bodyWidth).toBeLessThanOrEqual(390);
   await expect(page.getByRole('link', { name: /Download for Chromium/ })).toBeVisible();
+  await page.getByLabel('Playwright helper example').focus();
+  await expect(page.getByLabel('Playwright helper example')).toBeFocused();
+  const targetSizes = await page.locator('.header-download, .hero-actions .text-link, .helper-links a, .site-footer nav a').evaluateAll((targets) => targets.map((target) => {
+    const box = target.getBoundingClientRect();
+    return { width: box.width, height: box.height };
+  }));
+  expect(targetSizes).not.toHaveLength(0);
+  expect(targetSizes.every(({ width, height }) => width >= 44 && height >= 44)).toBe(true);
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact || ''))).toEqual([]);
+});
+
+test('offline artifact requests return a truthful failure instead of the app shell', async ({ page, context }) => {
+  await page.goto('/');
+  await page.evaluate(async () => { await navigator.serviceWorker.ready; });
+  await page.reload();
+  await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
+  await context.setOffline(true);
+  try {
+    const offline = await page.evaluate(async () => {
+      const response = await fetch('/downloads/viewport-fact-sheet-chrome.zip');
+      return { status: response.status, contentType: response.headers.get('content-type'), body: await response.text() };
+    });
+    expect(offline.status).toBe(503);
+    expect(offline.contentType).toContain('text/plain');
+    expect(offline.body).toContain('not cached');
+    expect(offline.body).not.toContain('<!doctype html>');
+  } finally {
+    await context.setOffline(false);
+  }
 });
 
 test('privacy and terms pages expose clear policy text', async ({ page }) => {

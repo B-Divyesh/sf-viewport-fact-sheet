@@ -15,4 +15,11 @@ describe('static release policy', () => {
     expect(config.globalHeaders['Permissions-Policy']).toContain('camera=()');
     expect(config.routes.find((route) => route.route === '/assets/*')?.headers['Cache-Control']).toContain('immutable');
   });
+
+  it('uses the offline shell only for navigation and gives uncached artifacts a truthful failure', async () => {
+    const worker = await readFile('site/public/sw.js', 'utf8');
+    expect(worker).toContain("event.request.mode === 'navigate'");
+    expect(worker).toContain('status: 503');
+    expect(worker).toContain('Offline: this resource is not cached.');
+  });
 });
