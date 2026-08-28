@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#071a2b" />
+  <meta name="description" content="Select a page element and export deterministic facts about its viewport geometry, clipping, scroll chain, and hit-test result." />
+  <title>Viewport Fact Sheet — deterministic browser geometry</title>
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link rel="preload" href="/assets/viewport-blueprint-hero.webp" as="image" type="image/webp" fetchpriority="high" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="network-note" id="network-note" role="status" hidden>You’re offline. The guide still works; downloads resume when you reconnect.</div>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Viewport Fact Sheet home"><span class="mark" aria-hidden="true"><i></i></span><span>Viewport<br />Fact Sheet</span></a>
+    <nav aria-label="Primary navigation"><a href="#facts">What it records</a><a href="#playwright">Playwright</a><a href="#install">Install</a></nav>
+    <a class="header-download" href="/downloads/viewport-fact-sheet-chrome.zip" download>Download <span aria-hidden="true">↓</span></a>
+  </header>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="sheet-id">Drawing VFS—01 / viewport evidence</p>
+        <h1 id="hero-title">Stop guessing.<br /><em>Measure the viewport.</em></h1>
+        <p class="lede">Select an element. Get a portable fact sheet for its box model, clipping chain, scroll ancestors, stacking hit test, and on-screen reachability.</p>
+        <div class="hero-actions"><a class="button primary" href="/downloads/viewport-fact-sheet-chrome.zip" download>Download for Chromium <span aria-hidden="true">↗</span></a><a class="text-link" href="#sample">Read a sample report <span aria-hidden="true">↓</span></a></div>
+        <p class="trust"><span aria-hidden="true">✓</span> Free · local only · no page contents or form values</p>
+      </div>
+      <figure class="hero-plate">
+        <picture><source media="(max-width:700px)" srcset="/assets/viewport-blueprint-hero-mobile.webp" /><img src="/assets/viewport-blueprint-hero.webp" width="1280" height="853" alt="Exploded blueprint drawing of nested browser layout boxes, clipping planes, and measurement guides" decoding="async" fetchpriority="high" /></picture>
+        <figcaption>Plate 01: the visible viewport is an intersection, not a DOM property.</figcaption>
+      </figure>
+    </section>
+    <section class="problem-strip" aria-label="Questions this tool answers"><p>“Why is this below the fold?”</p><p>“Which ancestor clips it?”</p><p>“What wins the hit test?”</p><p>“Why is it off-centre?”</p></section>
+    <section class="sample-section" id="sample" aria-labelledby="sample-title">
+      <div class="section-intro"><p class="section-no">01 / Evidence, not interpretation</p><h2 id="sample-title">One selection. A checkable answer.</h2><p>The report records what the browser knows now, in pixels and explicit reason codes. Save the JSON with a bug, paste it in a review, or assert it in a test.</p></div>
+      <article class="fact-sheet" aria-label="Sample viewport fact sheet">
+        <header><div><span class="kicker">Target</span><code>#checkout-panel</code></div><span class="stamp fail">Not reachable</span></header>
+        <div class="verdict-line"><strong>37% visible</strong><span>centre hit: <b>.sticky-footer</b></span></div>
+        <dl><div><dt>Border box</dt><dd>420 × 288 px</dd></div><div><dt>Viewport position</dt><dd>x 804, y 612</dd></div><div><dt>Centre delta</dt><dd>+502 x / +396 y</dd></div><div><dt>Position / z-index</dt><dd>static / auto</dd></div></dl>
+        <div class="finding"><span aria-hidden="true">!</span><div><small>Primary finding</small><strong>Clipped by <code>.shell__body</code></strong><p>The visible centre is occluded by <code>.sticky-footer</code>.</p></div></div>
+        <ol class="mini-chain" aria-label="Clipping chain"><li><span>01</span><code>.shell__body</code><b>overflow-y: auto</b></li><li><span>02</span><code>main.app</code><b>overflow: hidden</b></li><li><span>03</span><code>viewport</code><b>1440 × 900</b></li></ol>
+      </article>
+    </section>
+    <section class="facts-section" id="facts" aria-labelledby="facts-title">
+      <div class="section-intro light"><p class="section-no">02 / Recorded fields</p><h2 id="facts-title">The missing layer between DOM and screenshot.</h2></div>
+      <div class="fact-grid">
+        <article><span class="diagram box" aria-hidden="true"></span><h3>Geometry</h3><p>Border and content boxes, document offset, viewport position, centre delta, and visible-area ratio.</p></article>
+        <article><span class="diagram clip" aria-hidden="true"></span><h3>Clip &amp; scroll chain</h3><p>Each relevant ancestor, overflow mode, scroll extent, current offset, and clipped edges.</p></article>
+        <article><span class="diagram hit" aria-hidden="true"></span><h3>Reachability</h3><p>Computed visibility, viewport intersection, centre-point hit target, pointer events, and reason codes.</p></article>
+        <article><span class="diagram delta" aria-hidden="true"></span><h3>Style deltas</h3><p>Position, insets, transform, z-index, box sizing, margins, borders, and padding—only the facts that move boxes.</p></article>
+      </div>
+    </section>
+    <section class="workflow" aria-labelledby="workflow-title">
+      <div class="section-intro"><p class="section-no">03 / Workflow</p><h2 id="workflow-title">From odd layout to durable evidence.</h2></div>
+      <ol><li><span>1</span><div><h3>Pick</h3><p>Press the toolbar button or <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd>, then choose an element.</p></div></li><li><span>2</span><div><h3>Read</h3><p>See the verdict, measurements, hit test, and ancestor chain immediately.</p></div></li><li><span>3</span><div><h3>Export</h3><p>Copy or download versioned JSON. Query strings, form values, and page text stay out.</p></div></li></ol>
+    </section>
+    <section class="playwright" id="playwright" aria-labelledby="playwright-title">
+      <div><p class="section-no">04 / Same facts in tests</p><h2 id="playwright-title">Ask Playwright what a user can reach.</h2><p>The companion helper runs the same inspection engine against a locator. It returns the report or throws with exact reason codes.</p><div class="helper-links"><a href="/downloads/viewport-fact-sheet-playwright.mjs" download>Download helper</a><a href="/downloads/viewport-fact-sheet-playwright.d.ts" download>Type definitions</a></div></div>
+      <div class="code-window"><header><span></span><span></span><span></span><b>checkout.spec.ts</b><button type="button" id="copy-code">Copy</button></header><pre><code id="code-sample">import { getViewportFactSheet } from
+  './viewport-fact-sheet-playwright.mjs';
+
+const facts = await getViewportFactSheet(
+  page,
+  page.getByRole('button', { name: 'Pay now' })
+);
+
+expect(facts.verdict.reachable).toBe(true);</code></pre></div>
+    </section>
+    <section class="install" id="install" aria-labelledby="install-title">
+      <p class="section-no">05 / Install locally</p><h2 id="install-title">Open the drawing set.</h2>
+      <ol><li><b>1</b><span>Download and unzip the Chromium package.</span></li><li><b>2</b><span>Open <code>chrome://extensions</code> and enable Developer mode.</span></li><li><b>3</b><span>Choose “Load unpacked” and select the unzipped folder.</span></li></ol>
+      <a class="button primary" href="/downloads/viewport-fact-sheet-chrome.zip" download>Download extension package <span aria-hidden="true">↓</span></a>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="wordmark"><span class="mark" aria-hidden="true"><i></i></span><span>Viewport<br />Fact Sheet</span></div><p>Deterministic browser facts. No conversation required.</p><nav aria-label="Legal"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-viewport-fact-sheet" rel="noreferrer">Source</a></nav><small>Generated blueprint imagery disclosed in the design notes. Built by the Param Factory.</small></footer>
+  <script type="module" src="/main.ts"></script>
+</body>
+</html>
