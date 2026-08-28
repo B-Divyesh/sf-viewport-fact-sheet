@@ -28,6 +28,7 @@ test('published downloads have the advertised bytes and the skip link moves focu
   expect(await helper.text()).toContain('__VIEWPORT_FACT_SHEET__');
   const helperBundle = await page.request.get('/downloads/viewport-fact-sheet-playwright.zip');
   expect(helperBundle.headers()['content-type']).toContain('application/zip');
+  await expect(page.getByRole('link', { name: /Type definitions/ })).toHaveCount(0);
 });
 
 test('mobile layout stays usable at 390px', async ({ page }) => {

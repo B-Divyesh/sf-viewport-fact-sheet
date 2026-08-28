@@ -17,7 +17,7 @@ The packaged archive is `.output/viewport-fact-sheet-chrome.zip` and is also cop
 
 ## Playwright helper
 
-After a build, copy `dist/playwright-helper/index.mjs` into your test project. It is a self-contained helper; `index.d.ts` is optional editor type information. The site also offers `viewport-fact-sheet-playwright.zip` containing both files.
+After a build, copy `dist/playwright-helper/index.mjs` into your test project. It is a self-contained helper; `index.d.ts` is optional editor type information. The site offers `viewport-fact-sheet-playwright.zip` when you want the helper and its type definition together.
 
 ```ts
 import { getViewportFactSheet, assertViewportReachable } from './index.mjs';
