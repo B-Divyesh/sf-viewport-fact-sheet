@@ -6,4 +6,7 @@ export declare function installViewportFactSheet(page:Page):Promise<void>;
 export declare function getViewportFactSheet(page:Page,target:string|Locator):Promise<ViewportFactSheet>;
 export declare function assertViewportReachable(page:Page,target:string|Locator):Promise<ViewportFactSheet>;
 `;
-await writeFile(new URL('../dist/playwright-helper/index.d.ts', import.meta.url), types);
+// TypeScript's NodeNext resolver pairs an `.mjs` implementation with `.d.mts`.
+// Keep the declaration name aligned so the advertised relative ESM import is
+// typed without package metadata or consumer-side path mappings.
+await writeFile(new URL('../dist/playwright-helper/index.d.mts', import.meta.url), types);

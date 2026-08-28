@@ -1,11 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { collectFactSheet, selectorFor } from '../../src/inspector';
+import { collectFactSheet, safePageUrl, selectorFor } from '../../src/inspector';
 
 const makeRect = (left: number, top: number, width: number, height: number): DOMRect => ({
   x: left, y: top, left, top, width, height, right: left + width, bottom: top + height, toJSON: () => ({}),
 });
 
 describe('inspection engine', () => {
+  it('retains only protocol for URL schemes that can embed private payloads', () => {
+    expect(safePageUrl({ protocol: 'data:', origin: 'null', pathname: 'text/html,PRIVATE' } as Location)).toBe('data:');
+    expect(safePageUrl({ protocol: 'blob:', origin: 'https://example.com', pathname: 'https://example.com/private-id' } as Location)).toBe('blob:');
+    expect(safePageUrl({ protocol: 'file:', origin: 'null', pathname: '/Users/private/form.html' } as Location)).toBe('file:');
+    expect(safePageUrl({ protocol: 'https:', origin: 'https://example.com', pathname: '/checkout' } as Location)).toBe('https://example.com/checkout');
+  });
+
   it('builds a stable, unique selector without page text', () => {
     document.body.innerHTML = '<main><button data-testid="pay-now">A private card number</button></main>';
     const button = document.querySelector('button')!;

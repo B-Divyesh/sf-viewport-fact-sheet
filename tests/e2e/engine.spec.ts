@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
+import { mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -7,7 +8,6 @@ import { pathToFileURL } from 'node:url';
 type Report = { verdict: { reachable: boolean; reasons: string[]; visibleAreaRatio: number }; clippingAncestors: unknown[]; scrollAncestors: unknown[] };
 
 async function helper() {
-  // @ts-expect-error The generated helper is produced before Playwright starts.
   return import('../../dist/playwright-helper/index.mjs') as Promise<{ getViewportFactSheet(page: Page, target: string): Promise<Report> }>;
 }
 
@@ -81,6 +81,34 @@ test('the advertised single-file helper works in a clean consumer without engine
     const imported = (await import(`${pathToFileURL(join(consumer, 'viewport-fact-sheet-playwright.mjs')).href}?clean-consumer`)) as { getViewportFactSheet(page: Page, target: string): Promise<Report> };
     await page.setContent('<button id="reachable">Reach me</button>');
     await expect(imported.getViewportFactSheet(page, '#reachable')).resolves.toMatchObject({ verdict: { reachable: true } });
+  } finally {
+    await rm(consumer, { recursive: true, force: true });
+  }
+});
+
+test('reports never serialize data URL document or form contents', async ({ page }) => {
+  const pageSentinel = 'PAGE-TEXT-SENTINEL-7319';
+  const valueSentinel = 'FORM-VALUE-SENTINEL-4826';
+  await page.goto(`data:text/html,<label for="recovery">${pageSentinel}</label><input id="recovery" value="${valueSentinel}" style="width:100px;height:44px">`);
+  const { getViewportFactSheet } = await helper();
+  const report = await getViewportFactSheet(page, '#recovery') as Report & { page: { url: string } };
+  const exported = JSON.stringify(report);
+  expect(report.page.url).toBe('data:');
+  expect(exported).not.toContain(pageSentinel);
+  expect(exported).not.toContain(valueSentinel);
+});
+
+test('the helper ZIP types resolve from an mjs import in a clean NodeNext consumer', async () => {
+  const consumer = await mkdtemp(join(tmpdir(), 'vfs-helper-types-'));
+  try {
+    execFileSync('unzip', ['-q', join(process.cwd(), 'dist/site/downloads/viewport-fact-sheet-playwright.zip'), '-d', consumer]);
+    await symlink(join(process.cwd(), 'node_modules'), join(consumer, 'node_modules'), 'dir');
+    await writeFile(join(consumer, 'consumer.mts'), "import { getViewportFactSheet } from './index.mjs';\nvoid getViewportFactSheet;\n");
+    await writeFile(join(consumer, 'tsconfig.json'), JSON.stringify({
+      compilerOptions: { module: 'NodeNext', moduleResolution: 'NodeNext', strict: true, noEmit: true, skipLibCheck: false },
+      include: ['consumer.mts'],
+    }));
+    execFileSync(process.execPath, [join(process.cwd(), 'node_modules/typescript/bin/tsc'), '-p', join(consumer, 'tsconfig.json')], { stdio: 'pipe' });
   } finally {
     await rm(consumer, { recursive: true, force: true });
   }

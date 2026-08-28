@@ -2,6 +2,14 @@ import { readFile } from 'node:fs/promises';
 import { describe, expect, it } from 'vitest';
 
 describe('static release policy', () => {
+  it('makes the deployment build produce and verify every advertised download', async () => {
+    const pkg = JSON.parse(await readFile('package.json', 'utf8')) as { scripts: Record<string, string> };
+    expect(pkg.scripts['build:site']).toContain('build:extension');
+    expect(pkg.scripts['build:site']).toContain('build:helper');
+    expect(pkg.scripts['build:site']).toContain('package-release.mjs');
+    expect(pkg.scripts['build:site']).toContain('verify-release.mjs');
+  });
+
   it('keeps downloads out of the SPA fallback and serves their real MIME types', async () => {
     const config = JSON.parse(await readFile('site/public/staticwebapp.config.json', 'utf8')) as {
       navigationFallback: { exclude: string[] };

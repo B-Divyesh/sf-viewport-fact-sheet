@@ -7,8 +7,9 @@
     "dev": "concurrently \"wxt\" \"vite --config site/vite.config.ts\" \"esbuild src/injected.ts --bundle --format=iife --target=chrome110 --outfile=.output/chrome-mv3/picker.js --watch\"",
     "build:extension": "wxt build && esbuild src/injected.ts --bundle --format=iife --target=chrome110 --minify --outfile=.output/chrome-mv3/picker.js && node scripts/package-extension.mjs",
     "build:helper": "node scripts/build-helper.mjs && node scripts/write-helper-types.mjs",
-    "build:site": "vite build --config site/vite.config.ts",
-    "build": "node scripts/clean.mjs && npm run build:extension && npm run build:helper && npm run build:site && node scripts/package-release.mjs",
+    "build:site:pages": "vite build --config site/vite.config.ts",
+    "build:site": "node scripts/clean.mjs && npm run build:extension && npm run build:helper && npm run build:site:pages && node scripts/package-release.mjs && node scripts/verify-release.mjs",
+    "build": "npm run build:site",
     "test": "vitest run && npm run build && npm run test:e2e",
     "test:unit": "vitest run",
     "test:e2e": "xvfb-run -a playwright test"

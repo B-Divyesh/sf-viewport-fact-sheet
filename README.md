@@ -17,7 +17,7 @@ The packaged archive is `.output/viewport-fact-sheet-chrome.zip` and is also cop
 
 ## Playwright helper
 
-After a build, copy `dist/playwright-helper/index.mjs` into your test project. It is a self-contained helper; `index.d.ts` is optional editor type information. The site offers `viewport-fact-sheet-playwright.zip` when you want the helper and its type definition together.
+After a build, copy `dist/playwright-helper/index.mjs` into your test project. It is a self-contained helper; `index.d.mts` is optional editor type information for standard NodeNext imports. The site offers `viewport-fact-sheet-playwright.zip` when you want the helper and its type definition together.
 
 ```ts
 import { getViewportFactSheet, assertViewportReachable } from './index.mjs';
@@ -39,6 +39,7 @@ npm install
 npm run dev
 npm run test:unit
 npm run build        # dist/site plus .output/chrome-mv3
+npm run build:site   # complete deployable site, including all downloads
 npm test             # unit tests, clean build, Playwright + axe checks
 ```
 
@@ -63,7 +64,7 @@ See the deployed [privacy policy](https://viewport-fact-sheet.sociobot.in/privac
 
 ## Deployment
 
-Deploy `dist/site/` as a static site at `https://viewport-fact-sheet.sociobot.in`.
+Run `npm run build:site`, then deploy the complete `dist/site/` directory as a static site at `https://viewport-fact-sheet.sociobot.in`. The build fails unless all three advertised downloads exist, both ZIPs are valid, and the helper archive contains its NodeNext declaration.
 
 ## License
 

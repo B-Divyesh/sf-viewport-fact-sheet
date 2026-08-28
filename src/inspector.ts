@@ -16,6 +16,20 @@ function escapeCss(value: string): string {
   return value.replace(/[^a-zA-Z0-9_-]/g, (character) => `\\${character}`);
 }
 
+/**
+ * Keep useful route context for ordinary web pages without ever serializing a
+ * URL scheme whose pathname can itself contain document or local-file data.
+ */
+export function safePageUrl(location: Location): string {
+  if (location.protocol === 'http:' || location.protocol === 'https:') {
+    return `${location.origin}${location.pathname}`;
+  }
+  if (location.protocol === 'chrome-extension:' || location.protocol === 'moz-extension:') {
+    return `${location.origin}${location.pathname}`;
+  }
+  return location.protocol;
+}
+
 export function selectorFor(element: Element): string {
   if (element.id) return `#${escapeCss(element.id)}`;
   const testId = element.getAttribute('data-testid');
@@ -134,7 +148,7 @@ export function collectFactSheet(element: Element): ViewportFactSheet {
   if (style.pointerEvents === 'none') reasons.push('pointer-events-none');
   if (!reasons.length) reasons.push('no-blocking-condition-detected');
   const reachable = rendered && inViewport && style.pointerEvents !== 'none' && (hitTest === 'target' || hitTest === 'descendant');
-  const safeUrl = `${view.location.origin}${view.location.pathname}`;
+  const safeUrl = safePageUrl(view.location);
   const boxSizing = style.boxSizing;
   const horizontalExtras = px(style.paddingLeft) + px(style.paddingRight) + px(style.borderLeftWidth) + px(style.borderRightWidth);
   const verticalExtras = px(style.paddingTop) + px(style.paddingBottom) + px(style.borderTopWidth) + px(style.borderBottomWidth);
