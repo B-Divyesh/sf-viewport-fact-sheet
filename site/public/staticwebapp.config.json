@@ -16,6 +16,13 @@
   },
   "routes": [
     {
+      "route": "/downloads/viewport-fact-sheet-playwright.d.ts",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "Content-Type": "text/plain; charset=utf-8"
+      }
+    },
+    {
       "route": "/assets/*",
       "headers": { "Cache-Control": "public, max-age=31536000, immutable" }
     },
