@@ -4,7 +4,7 @@ Viewport Fact Sheet is a local-first Chromium extension and Playwright helper fo
 
 It reports the box model and coordinates, relevant computed styles, clipping and scroll ancestors, visible-area ratio, centre-point hit test, and a concise verdict with stable reason codes.
 
-The extension never reads form values or network bodies. It strips query strings and fragments from recorded URLs, runs only after a toolbar action or keyboard shortcut, and keeps only the latest report in local extension storage.
+The extension never reads form values, page text (including ARIA labels), or network bodies. It strips query strings and fragments from recorded URLs, runs only after a toolbar action or keyboard shortcut, and keeps only the latest report in local extension storage.
 
 ## Install the built extension
 
@@ -17,7 +17,7 @@ The packaged archive is `.output/viewport-fact-sheet-chrome.zip` and is also cop
 
 ## Playwright helper
 
-After a build, keep `index.mjs`, `index.d.ts`, and `engine.js` from `dist/playwright-helper/` together.
+After a build, copy `dist/playwright-helper/index.mjs` into your test project. It is a self-contained helper; `index.d.ts` is optional editor type information. The site also offers `viewport-fact-sheet-playwright.zip` containing both files.
 
 ```ts
 import { getViewportFactSheet, assertViewportReachable } from './index.mjs';
@@ -42,7 +42,7 @@ npm run build        # dist/site plus .output/chrome-mv3
 npm test             # unit tests, clean build, Playwright + axe checks
 ```
 
-`npm run build:site` writes the deployable static site to `dist/site/`, with `index.html` at that root. The full build also places extension and helper downloads there. The browser suite covers 20 seeded layout classifications, desktop and 390 px mobile rendering, legal routes, serious/critical axe findings, console errors, and download links.
+`npm run build:site` writes the deployable static site to `dist/site/`, with `index.html` at that root. The full build also places extension and helper downloads there. Publish the complete `dist/site/` directory, including `downloads/`, `_headers`, and `staticwebapp.config.json`, verbatim. The Azure configuration excludes downloads from SPA fallback, assigns their MIME types, and sets the response policies. The browser suite covers 20 seeded layout classifications, desktop and 390 px mobile rendering, legal routes, serious/critical axe findings, console errors, keyboard skip focus, download contents, and privacy-safe reports.
 
 ## Project layout
 

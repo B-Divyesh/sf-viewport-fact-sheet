@@ -1,12 +1,13 @@
 import type { Locator, Page } from 'playwright';
 import type { ViewportFactSheet } from '../src/types';
-import { readFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
 
-let engineSource: string | null = null;
+declare const __VIEWPORT_FACT_SHEET_ENGINE__: string;
+
+// The release build embeds this generated browser-only source. Keeping it in
+// this module makes the downloaded helper a complete, single-file consumer API.
+const engineSource = __VIEWPORT_FACT_SHEET_ENGINE__;
 
 export async function installViewportFactSheet(page: Page): Promise<void> {
-  if (!engineSource) engineSource = await readFile(new URL('./engine.js', import.meta.url), 'utf8');
   await page.addInitScript({ content: engineSource });
   await page.evaluate(engineSource);
 }

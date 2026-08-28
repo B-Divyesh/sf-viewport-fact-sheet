@@ -1,3 +1,5 @@
+import './skip-link';
+
 const networkNote = document.querySelector<HTMLElement>('#network-note')!;
 const syncNetwork = () => { networkNote.hidden = navigator.onLine; };
 window.addEventListener('online', syncNetwork);

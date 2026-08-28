@@ -135,16 +135,13 @@ export function collectFactSheet(element: Element): ViewportFactSheet {
   if (!reasons.length) reasons.push('no-blocking-condition-detected');
   const reachable = rendered && inViewport && style.pointerEvents !== 'none' && (hitTest === 'target' || hitTest === 'descendant');
   const safeUrl = `${view.location.origin}${view.location.pathname}`;
-  const role = element.getAttribute('role');
-  const ariaLabel = element.getAttribute('aria-label');
-  const labelledBy = element.getAttribute('aria-labelledby');
-  const labelledText = labelledBy ? labelledBy.split(/\s+/).map((id) => doc.getElementById(id)?.textContent?.trim()).filter(Boolean).join(' ') : '';
   const boxSizing = style.boxSizing;
   const horizontalExtras = px(style.paddingLeft) + px(style.paddingRight) + px(style.borderLeftWidth) + px(style.borderRightWidth);
   const verticalExtras = px(style.paddingTop) + px(style.paddingBottom) + px(style.borderTopWidth) + px(style.borderBottomWidth);
   return {
     schemaVersion: '1.0', capturedAt: new Date().toISOString(), page: { url: safeUrl, title: doc.title },
-    target: { selector: selectorFor(element), tag: element.tagName.toLowerCase(), id: element.id || null, classes: [...element.classList], role, accessibleName: ariaLabel || labelledText || null },
+    // Do not resolve ARIA labels: labels are page text and reports are retained/exported.
+    target: { selector: selectorFor(element), tag: element.tagName.toLowerCase(), id: element.id || null, classes: [...element.classList], role: element.getAttribute('role') },
     verdict: { reachable, inViewport, rendered, hitTest, visibleAreaRatio, reasons },
     viewport: { width: view.innerWidth, height: view.innerHeight, scrollX: round(view.scrollX), scrollY: round(view.scrollY), devicePixelRatio: view.devicePixelRatio },
     geometry: {

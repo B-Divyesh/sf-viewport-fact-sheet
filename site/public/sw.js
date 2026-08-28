@@ -1,5 +1,5 @@
-const CACHE = 'viewport-fact-sheet-v1';
-const SHELL = ['/', '/assets/viewport-blueprint-hero-mobile.webp', '/assets/viewport-blueprint-hero.webp', '/privacy/', '/terms/'];
+const CACHE = 'viewport-fact-sheet-v2';
+const SHELL = ['/', '/assets/viewport-blueprint-hero-mobile.20260828.webp', '/assets/viewport-blueprint-hero.20260828.webp', '/privacy/', '/terms/'];
 self.addEventListener('install', (event) => event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL))));
 self.addEventListener('activate', (event) => event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key))))));
 self.addEventListener('fetch', (event) => {

@@ -7,7 +7,7 @@
   <meta name="description" content="Select a page element and export deterministic facts about its viewport geometry, clipping, scroll chain, and hit-test result." />
   <title>Viewport Fact Sheet — deterministic browser geometry</title>
   <link rel="icon" href="/favicon.png" type="image/png" />
-  <link rel="preload" href="/assets/viewport-blueprint-hero.webp" as="image" type="image/webp" fetchpriority="high" />
+  <link rel="preload" href="/assets/viewport-blueprint-hero.20260828.webp" as="image" type="image/webp" fetchpriority="high" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
@@ -18,7 +18,7 @@
     <nav aria-label="Primary navigation"><a href="#facts">What it records</a><a href="#playwright">Playwright</a><a href="#install">Install</a></nav>
     <a class="header-download" href="/downloads/viewport-fact-sheet-chrome.zip" download>Download <span aria-hidden="true">↓</span></a>
   </header>
-  <main id="main">
+  <main id="main" tabindex="-1">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
         <p class="sheet-id">Drawing VFS—01 / viewport evidence</p>
@@ -28,7 +28,7 @@
         <p class="trust"><span aria-hidden="true">✓</span> Free · local only · no page contents or form values</p>
       </div>
       <figure class="hero-plate">
-        <picture><source media="(max-width:700px)" srcset="/assets/viewport-blueprint-hero-mobile.webp" /><img src="/assets/viewport-blueprint-hero.webp" width="1280" height="853" alt="Exploded blueprint drawing of nested browser layout boxes, clipping planes, and measurement guides" decoding="async" fetchpriority="high" /></picture>
+        <picture><source media="(max-width:700px)" srcset="/assets/viewport-blueprint-hero-mobile.20260828.webp" /><img src="/assets/viewport-blueprint-hero.20260828.webp" width="1280" height="853" alt="Exploded blueprint drawing of nested browser layout boxes, clipping planes, and measurement guides" decoding="async" fetchpriority="high" /></picture>
         <figcaption>Plate 01: the visible viewport is an intersection, not a DOM property.</figcaption>
       </figure>
     </section>
@@ -57,7 +57,7 @@
       <ol><li><span>1</span><div><h3>Pick</h3><p>Press the toolbar button or <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd>, then choose an element.</p></div></li><li><span>2</span><div><h3>Read</h3><p>See the verdict, measurements, hit test, and ancestor chain immediately.</p></div></li><li><span>3</span><div><h3>Export</h3><p>Copy or download versioned JSON. Query strings, form values, and page text stay out.</p></div></li></ol>
     </section>
     <section class="playwright" id="playwright" aria-labelledby="playwright-title">
-      <div><p class="section-no">04 / Same facts in tests</p><h2 id="playwright-title">Ask Playwright what a user can reach.</h2><p>The companion helper runs the same inspection engine against a locator. It returns the report or throws with exact reason codes.</p><div class="helper-links"><a href="/downloads/viewport-fact-sheet-playwright.mjs" download>Download helper</a><a href="/downloads/viewport-fact-sheet-playwright.d.ts" download>Type definitions</a></div></div>
+      <div><p class="section-no">04 / Same facts in tests</p><h2 id="playwright-title">Ask Playwright what a user can reach.</h2><p>The companion helper runs the same inspection engine against a locator. It returns the report or throws with exact reason codes.</p><div class="helper-links"><a href="/downloads/viewport-fact-sheet-playwright.mjs" download>Download single-file helper</a><a href="/downloads/viewport-fact-sheet-playwright.d.ts" download>Type definitions</a><a href="/downloads/viewport-fact-sheet-playwright.zip" download>Helper bundle (.zip)</a></div></div>
       <div class="code-window"><header><span></span><span></span><span></span><b>checkout.spec.ts</b><button type="button" id="copy-code">Copy</button></header><pre><code id="code-sample">import { getViewportFactSheet } from
   './viewport-fact-sheet-playwright.mjs';
 

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"wxt\" \"vite --config site/vite.config.ts\" \"esbuild src/injected.ts --bundle --format=iife --target=chrome110 --outfile=.output/chrome-mv3/picker.js --watch\"",
     "build:extension": "wxt build && esbuild src/injected.ts --bundle --format=iife --target=chrome110 --minify --outfile=.output/chrome-mv3/picker.js && node scripts/package-extension.mjs",
-    "build:helper": "esbuild playwright-helper/index.ts --bundle --platform=node --format=esm --target=node18 --external:playwright --outfile=dist/playwright-helper/index.mjs && esbuild src/playwright-engine.ts --bundle --format=iife --target=chrome110 --minify --outfile=dist/playwright-helper/engine.js && node scripts/write-helper-types.mjs",
+    "build:helper": "node scripts/build-helper.mjs && node scripts/write-helper-types.mjs",
     "build:site": "vite build --config site/vite.config.ts",
     "build": "node scripts/clean.mjs && npm run build:extension && npm run build:helper && npm run build:site && node scripts/package-release.mjs",
     "test": "vitest run && npm run build && playwright test",
@@ -16,15 +16,15 @@
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",
     "@playwright/test": "^1.58.2",
-    "@types/chrome": "0.0.287",
-    "concurrently": "9.1.2",
-    "esbuild": "0.25.0",
-    "happy-dom": "17.1.8",
+    "@types/chrome": "^0.0.330",
+    "concurrently": "^9.2.1",
+    "esbuild": "^0.25.11",
+    "happy-dom": "^20.11.12",
     "playwright": "1.58.2",
     "playwright-core": "^1.58.2",
-    "typescript": "5.7.3",
-    "vite": "6.1.0",
-    "vitest": "3.0.5",
-    "wxt": "0.20.6"
+    "typescript": "^5.9.3",
+    "vite": "^6.4.3",
+    "vitest": "^3.2.7",
+    "wxt": "^0.21.4"
   }
 }

@@ -1,5 +1,8 @@
 import { test, expect, type Page } from '@playwright/test';
-import { readFile } from 'node:fs/promises';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 type Report = { verdict: { reachable: boolean; reasons: string[]; visibleAreaRatio: number }; clippingAncestors: unknown[]; scrollAncestors: unknown[] };
 
@@ -68,4 +71,17 @@ test('picker captures a hovered element and Escape cancels cleanly', async ({ pa
   const cancellation = await page.evaluate(() => (window as typeof window & { __pickerMessage?: { type: string } }).__pickerMessage);
   expect(cancellation?.type).toBe('VFS_CANCELLED');
   await expect(page.locator('#viewport-fact-sheet-picker')).toHaveCount(0);
+});
+
+test('the advertised single-file helper works in a clean consumer without engine.js', async ({ page }) => {
+  const consumer = await mkdtemp(join(tmpdir(), 'vfs-helper-'));
+  try {
+    const helper = await readFile('dist/site/downloads/viewport-fact-sheet-playwright.mjs');
+    await writeFile(join(consumer, 'viewport-fact-sheet-playwright.mjs'), helper);
+    const imported = (await import(`${pathToFileURL(join(consumer, 'viewport-fact-sheet-playwright.mjs')).href}?clean-consumer`)) as { getViewportFactSheet(page: Page, target: string): Promise<Report> };
+    await page.setContent('<button id="reachable">Reach me</button>');
+    await expect(imported.getViewportFactSheet(page, '#reachable')).resolves.toMatchObject({ verdict: { reachable: true } });
+  } finally {
+    await rm(consumer, { recursive: true, force: true });
+  }
 });

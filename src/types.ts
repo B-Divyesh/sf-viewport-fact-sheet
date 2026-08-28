@@ -24,7 +24,7 @@ export interface ViewportFactSheet {
   schemaVersion: '1.0';
   capturedAt: string;
   page: { url: string; title: string };
-  target: { selector: string; tag: string; id: string | null; classes: string[]; role: string | null; accessibleName: string | null };
+  target: { selector: string; tag: string; id: string | null; classes: string[]; role: string | null };
   verdict: {
     reachable: boolean;
     inViewport: boolean;

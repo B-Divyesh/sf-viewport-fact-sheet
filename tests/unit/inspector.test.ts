@@ -27,6 +27,17 @@ describe('inspection engine', () => {
     expect(report.page.url).not.toContain('?');
   });
 
+  it('never resolves ARIA label text into an exported report', () => {
+    document.body.innerHTML = '<label id="recovery-label">Account recovery token: VERIFY-SECRET-9281</label><input id="recovery" aria-labelledby="recovery-label" value="another-secret" />';
+    const input = document.querySelector('#recovery')!;
+    Object.defineProperty(input, 'getBoundingClientRect', { value: () => makeRect(20, 30, 140, 44) });
+    Object.defineProperty(document, 'elementFromPoint', { configurable: true, value: () => input });
+    const exported = JSON.stringify(collectFactSheet(input));
+    expect(exported).not.toContain('VERIFY-SECRET-9281');
+    expect(exported).not.toContain('another-secret');
+    expect(JSON.parse(exported).target).not.toHaveProperty('accessibleName');
+  });
+
   it('classifies direct CSS invisibility', () => {
     document.body.innerHTML = '<div id="hidden" style="visibility:hidden">Hidden</div>';
     const element = document.querySelector('#hidden')!;
