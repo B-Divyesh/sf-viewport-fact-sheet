@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Viewport Fact Sheet</title>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to report</a>
+    <header class="masthead">
+      <div class="brand-mark" aria-hidden="true"><span></span></div>
+      <div><p class="eyebrow">Sheet VFS—01</p><h1>Viewport Fact Sheet</h1></div>
+    </header>
+    <main id="main">
+      <section class="toolbar" aria-labelledby="selection-title">
+        <div><p class="eyebrow" id="selection-title">Current selection</p><p class="status" id="status">No element captured</p></div>
+        <button class="primary" id="pick" type="button">Pick element <span aria-hidden="true">↗</span></button>
+      </section>
+      <div class="notice" id="notice" role="status" aria-live="polite" hidden></div>
+      <section id="empty" class="empty" aria-labelledby="empty-title">
+        <div class="empty-diagram" aria-hidden="true"><span></span></div>
+        <h2 id="empty-title">Place a measurement</h2>
+        <p>Pick any visible page element. Click to capture it; press Esc to cancel. The report stays in this browser.</p>
+        <p class="shortcut"><kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd></p>
+      </section>
+      <section id="report" hidden aria-labelledby="verdict-title">
+        <div class="verdict" id="verdict-block"><div><p class="eyebrow">Viewport verdict</p><h2 id="verdict-title">—</h2></div><span class="stamp" id="ratio">—</span></div>
+        <p class="selector" id="selector"></p>
+        <nav class="tabs" aria-label="Report views">
+          <button type="button" role="tab" aria-selected="true" aria-controls="summary-panel" id="summary-tab">Summary</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="json-panel" id="json-tab" tabindex="-1">JSON</button>
+        </nav>
+        <div id="summary-panel" role="tabpanel" aria-labelledby="summary-tab">
+          <dl class="facts" id="facts"></dl>
+          <h3>Finding</h3><ul class="reasons" id="reasons"></ul>
+          <h3>Scroll &amp; clipping chain</h3><ol class="chain" id="chain"></ol>
+        </div>
+        <div id="json-panel" role="tabpanel" aria-labelledby="json-tab" hidden><pre id="json"></pre></div>
+        <div class="actions"><button id="copy" type="button">Copy JSON</button><button id="download" type="button">Download JSON</button><button id="clear" type="button" class="quiet">Clear</button></div>
+      </section>
+    </main>
+    <footer><span>Local only · no page contents captured</span><a href="https://viewport-fact-sheet.sociobot.in/privacy" target="_blank" rel="noreferrer">Privacy</a></footer>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
