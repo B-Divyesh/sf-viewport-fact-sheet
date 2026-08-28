@@ -1,0 +1,8 @@
+{
+  "tool": "/opt/fleet/lib/gen-image.sh",
+  "deployment": "factory-image",
+  "date": "2026-08-28",
+  "size": "1536x1024",
+  "quality": "high",
+  "prompt": "Use case: stylized-concept. Asset type: responsive landing-page hero illustration. Scene/backdrop: midnight navy architectural blueprint paper with subtle tactile grain. Subject: an exploded axonometric browser viewport diagram built from nested layout rectangles, a scrolling boundary, clipping planes, dimension leaders, registration crosses, and one visibly offset rectangular element partly occluded by a translucent plane. Style/medium: precise cyan technical ink drawing mixed with translucent drafting film, tactile and editorial rather than software screenshot. Composition/framing: landscape; dense measured diagram weighted to the right, calm negative space on the left, clean silhouette that crops well to 3:2. Lighting/mood: flat overhead drafting-table light, crisp orthographic-isometric view, rigorous and forensic. Color palette: midnight navy, blueprint cyan, pale paper highlights, exactly a few sparse vermilion inspection marks. Constraints: visual geometry must read clearly at small size; no realistic browser UI. Avoid: text, letters, numbers, watermark, logo, people, brands, gradients, neon glow, illegible pseudo-labels."
+}

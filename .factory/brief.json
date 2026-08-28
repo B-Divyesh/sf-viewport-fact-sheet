@@ -1,0 +1,12 @@
+{
+  "slug": "viewport-fact-sheet",
+  "title": "Viewport Fact Sheet",
+  "territory": "devtools-data",
+  "user": "Frontend engineers and test authors who need deterministic evidence for why an element is visible, clipped, offset, or unreachable in the current browser viewport.",
+  "smallest_useful_product": "A browser extension plus Playwright helper that selects an element and exports its box model, relevant computed-style deltas, clipping/scroll chain, hit-test result, and in-viewport status.",
+  "success_measure": "For 20 seeded layout cases, users correctly classify the cause of invisibility or offset in at least 18 cases using the report alone.",
+  "artifact_class": "browser-extension",
+  "monetization": "free",
+  "constraints": "Run only on user-authorized pages; do not capture form values or network bodies; use documented browser extension and Playwright APIs.",
+  "state": "BUILT"
+}
