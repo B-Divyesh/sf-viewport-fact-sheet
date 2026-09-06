@@ -23,7 +23,8 @@ async function openDemo(page: Page) {
   await expect(page.getByRole('heading', { name: 'Inspect a sample clipped element' })).toBeVisible();
   await page.evaluate(() => {
     document.documentElement.style.scrollBehavior = 'auto';
-    window.scrollTo(0, 600);
+    const target = document.querySelector('#checkout-panel')!;
+    window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY - 250);
   });
 }
 
@@ -126,7 +127,8 @@ test('@claim:url-sanitization excludes a page query string', async ({ page }) =>
   await page.goto('/demo/?private-token=do-not-export');
   await page.evaluate(() => {
     document.documentElement.style.scrollBehavior = 'auto';
-    window.scrollTo(0, 600);
+    const target = document.querySelector('#checkout-panel')!;
+    window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY - 250);
   });
   const { getViewportFactSheet } = await helper();
   const report = await getViewportFactSheet(page, '#checkout-panel');
