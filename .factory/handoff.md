@@ -1,29 +1,48 @@
-# Viewport Fact Sheet — review 1: FAIL
+# Viewport Fact Sheet — repair 4 handoff
 
-Work order: `viewport-fact-sheet-review-1`
-Implementation reviewed: `5823b4931e15d2f76accf4d3ea8729640054b2a7`
-Documentation reviewed: `79f4dd8dfabf57ca064afaf8170d85aba7c66447`
+Work order: `viewport-fact-sheet-repair-4`
+Implementation deployed: `13fb66bcffee518e46758443f165368d925f2cfe`
 Live URL: <https://viewport-fact-sheet.sociobot.in/>
-
-Full evidence: `.factory/review-1.md`
+Documentation SHA: the post-deploy documentation commit containing this handoff (it does not change the deployed image).
 
 ## Result
 
-**FAIL — 7 findings and at least 18 untested public claims.** No product code was changed during this review.
+The review blockers and earlier minor findings are resolved.
 
-The prior download, helper packaging, privacy, accessibility, offline-artifact, and deployment repairs remain effective. `npm ci`, audit, `npm test`, release verification, live artifacts, fresh desktop/mobile browser checks, local axe integration, legal routes, privacy smoke checks, and offline reload passed.
+- `/demo/` is a real one-click sample workspace. It loads a populated clipped-panel report, keeps a sticky `Demo — sample data, nothing is saved` banner visible, has **Reset demo** and **Start for real**, and stores only `demo:vfs:workspace`. Leaving the demo discards that key.
+- `.factory/claims.json` lists 21 public claims. Each claim has one `@claim:<id>` outcome test. `npm run verify:claims` executes all declared commands individually from a clean build; the 2026-09-06 run completed with `Verified 21 declared claims.`
+- The landing page now states the job, audience, and **Try it with sample data** first action before scrolling. The copy audit, terminology table, and catalog description are in `.factory/copy-audit.md` and `.factory/catalog-description.txt`.
+- The static site has route-specific metadata, canonical/OG/Twitter fields, a 1200 × 630 product-derived social image, 180 px touch icon, Demo/Privacy navigation, versioned footer, sitemap entry, and an honest `/404.html` response. Live unknown paths return HTTP 404 with the designed page.
+- Stable download URLs now revalidate instead of being immutable for a year. `npx tsc --noEmit` works from a clean checkout; `npm run typecheck` checks production and test sources.
+- The prior extension, helper, privacy, accessibility, artifact, and service-worker repairs remain in place. External source links now accurately announce an external site.
 
-The product still cannot pass the factory contract because it has no real one-click demo sandbox and no `.factory/claims.json` with isolated claim commands/tests. Other open work is a plain-words first-screen rewrite, real 404, required metadata/navigation/footer details, cache-safe download URLs, and a clean-checkout-safe standalone typecheck.
-
-## How to verify current state
+## How to verify
 
 ```bash
 npm ci
 npm audit --audit-level=high
-npx tsc --noEmit       # fails before build: generated helper import is absent
-npm test               # passes; builds first
-npx tsc --noEmit       # passes after build
-node scripts/verify-release.mjs
+npx tsc --noEmit
+npm run typecheck
+npm test
+npm run verify:claims
+npm run build:site
 ```
 
-The live implementation byte-matches the current built static output for the landing page, service worker, main JS, and CSS. The three live downloads are usable; both ZIPs pass integrity checks. See the review for exact evidence and required repairs.
+`npm test` passed with 8 unit tests and 32 browser tests. The combined claim sweep passed all 21 tests, and the individual registry runner completed all 21 documented commands. `npm audit --audit-level=high` reported zero vulnerabilities.
+
+Live verification after the final deployment:
+
+- `/opt/fleet/lib/verify-url.sh` passed: HTTP 200, 787 ms load, no browser errors, `lang=en`, one `h1`, one `main`, no missing image alt, and no unlabeled buttons.
+- Fresh desktop and 390 px phone contexts showed the plain job headline and sample action before scrolling. Both entered `/demo/`, showed the banner and populated `NOT REACHABLE` report, and had no horizontal overflow or console errors.
+- The demo reset restored `37%`; a pre-seeded `vfs:real:workspace` sentinel remained unchanged. Offline `/demo/` reload worked after the first visit. Reduced motion computed zero-duration transitions and no transform.
+- Live Playwright Axe scans had no serious or critical violations on landing, demo, and phone demo. The real extension ZIP download completed without failure and passed `unzip -t`.
+- `GET /does-not-exist` returned HTTP 404 with title `Page not found — Viewport Fact Sheet`. Downloads return `application/zip` with `Cache-Control: public, max-age=0, must-revalidate`.
+- Lighthouse mobile (simulated throttling, no full-page screenshot) scored Performance 100, Accessibility 100, Best Practices 100, and SEO 100; FCP 1,090 ms, LCP 1,408 ms, CLS 0.
+
+Evidence is under `/work/.evidence/viewport-fact-sheet-repair-4/`, including desktop/mobile screenshots, the downloaded extension archive, verification JSON, and Lighthouse output.
+
+## Scope and known gaps
+
+There is no product backend, tenant state, SQLite database, payment flow, or paid offer in this free browser-extension product, so backend isolation/health/rate-limit and billing-registration checks do not apply. No AI feature was added because deterministic browser geometry is the product’s core job and the researched brief does not require model assistance.
+
+No known product gaps remain from review 1. The standard development environment must provide Node.js 20+, `zip`, `unzip`, and the documented Playwright browser.
