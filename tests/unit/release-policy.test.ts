@@ -10,18 +10,21 @@ describe('static release policy', () => {
     expect(pkg.scripts['build:site']).toContain('verify-release.mjs');
   });
 
-  it('keeps downloads out of the SPA fallback and serves their real MIME types', async () => {
+  it('uses a real 404 response and cache-safe download headers', async () => {
     const config = JSON.parse(await readFile('site/public/staticwebapp.config.json', 'utf8')) as {
-      navigationFallback: { exclude: string[] };
+      navigationFallback?: unknown;
       globalHeaders: Record<string, string>;
       mimeTypes: Record<string, string>;
       routes: Array<{ route: string; headers: Record<string, string> }>;
+      responseOverrides: Record<string, { rewrite: string }>;
     };
-    expect(config.navigationFallback.exclude).toContain('/downloads/*');
+    expect(config.navigationFallback).toBeUndefined();
+    expect(config.responseOverrides['404']).toEqual({ rewrite: '/404.html' });
     expect(config.mimeTypes).toMatchObject({ '.zip': 'application/zip', '.mjs': 'text/javascript' });
     expect(config.globalHeaders['Content-Security-Policy']).toContain("default-src 'self'");
     expect(config.globalHeaders['Permissions-Policy']).toContain('camera=()');
     expect(config.routes.find((route) => route.route === '/assets/*')?.headers['Cache-Control']).toContain('immutable');
+    expect(config.routes.find((route) => route.route === '/downloads/*')?.headers['Cache-Control']).toContain('must-revalidate');
   });
 
   it('uses the offline shell only for navigation and gives uncached artifacts a truthful failure', async () => {

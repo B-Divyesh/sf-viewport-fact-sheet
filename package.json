@@ -12,7 +12,10 @@
     "build": "npm run build:site",
     "test": "vitest run && npm run build && npm run test:e2e",
     "test:unit": "vitest run",
-    "test:e2e": "xvfb-run -a playwright test"
+    "test:e2e": "xvfb-run -a playwright test",
+    "test:claims": "npm run build && xvfb-run -a playwright test",
+    "verify:claims": "node scripts/verify-claims.mjs",
+    "typecheck": "npm run build:helper && tsc --noEmit && tsc -p tsconfig.tests.json --noEmit"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",

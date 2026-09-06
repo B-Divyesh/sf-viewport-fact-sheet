@@ -1,0 +1,1 @@
+Explain why a browser element is clipped, offset, or unreachable with a local viewport fact sheet.

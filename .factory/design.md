@@ -31,3 +31,5 @@ One generated hero plate shows an isometric browser viewport as a physical cyan 
 ### Provenance
 
 `site/public/assets/viewport-blueprint-hero.20260828.webp` and its mobile counterpart were generated for this product with the Factory Azure image deployment using `/opt/fleet/lib/gen-image.sh` on 2026-08-28. The date-stamped filenames make their immutable deployment caching safe. The exact prompt and generation metadata are stored in `assets/src/viewport-blueprint-hero.prompt.json`. Generated imagery is original to this product. Extension icons are hand-authored SVG by the product builder and are MIT-licensed with the repository.
+
+`site/public/viewport-fact-sheet-social.jpg` is a 1200 × 630 crop derived locally from that same original hero plate on 2026-09-06. It adds no new subject matter and is used only for Open Graph and Twitter previews. `site/public/apple-touch-icon.png` is a 180 px rasterization of the repository’s hand-authored extension icon. Both derivative assets retain the provenance and MIT licensing above.

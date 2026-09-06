@@ -1,12 +1,4 @@
 {
-  "navigationFallback": {
-    "rewrite": "/index.html",
-    "exclude": [
-      "/assets/*",
-      "/downloads/*",
-      "/*.{css,js,png,jpg,svg,webp,ico,woff2,json,txt,xml,wasm}"
-    ]
-  },
   "globalHeaders": {
     "Content-Security-Policy": "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'",
     "Permissions-Policy": "accelerometer=(), autoplay=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()",
@@ -21,13 +13,20 @@
     },
     {
       "route": "/downloads/*",
-      "headers": { "Cache-Control": "public, max-age=31536000, immutable" }
+      "headers": { "Cache-Control": "public, max-age=0, must-revalidate" }
+    },
+    {
+      "route": "/demo",
+      "rewrite": "/demo/index.html"
     },
     {
       "route": "/sw.js",
       "headers": { "Cache-Control": "no-cache" }
     }
   ],
+  "responseOverrides": {
+    "404": { "rewrite": "/404.html" }
+  },
   "mimeTypes": {
     ".zip": "application/zip",
     ".mjs": "text/javascript"

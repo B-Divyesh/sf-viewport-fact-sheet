@@ -9,5 +9,5 @@
     "noEmit": true,
     "types": ["chrome", "node", "@types/chrome"]
   },
-  "include": ["src", "entrypoints", "playwright-helper", "site", "tests", "wxt.config.ts"]
+  "include": ["src", "entrypoints", "playwright-helper", "site", "wxt.config.ts"]
 }

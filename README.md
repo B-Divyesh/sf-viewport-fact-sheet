@@ -1,23 +1,28 @@
 # Viewport Fact Sheet
 
-Viewport Fact Sheet is a local-first Chromium extension and Playwright helper for frontend engineers and test authors who need deterministic evidence for why an element is visible, clipped, offset, occluded, or unreachable in the current viewport.
+Viewport Fact Sheet explains why a browser element is visible, clipped, offset, or unreachable in the current viewport. It is for frontend engineers and test authors who need a checkable layout reason before changing CSS or writing a test.
 
-It reports the box model and coordinates, relevant computed styles, clipping and scroll ancestors, visible-area ratio, centre-point hit test, and a concise verdict with stable reason codes.
+The Chromium extension and Playwright helper record box geometry, clipping and scroll ancestors, a centre-point hit test, and reachability reason codes. Reports exclude page text, ARIA labels, form values, query strings, and URL fragments.
 
-The extension never reads form values, page text (including ARIA labels), or network bodies. It strips query strings and fragments from recorded URLs, runs only after a toolbar action or keyboard shortcut, and keeps only the latest report in local extension storage.
+## Try the sample
 
-## Install the built extension
+Open `/demo/` or choose **Try it with sample data** on the site. The sample starts with a populated report for a clipped checkout panel. It uses the separate `demo:vfs:workspace` localStorage key.
 
-1. Run `npm install && npm run build`.
-2. Open `chrome://extensions`, enable **Developer mode**, and choose **Load unpacked**.
-3. Select `.output/chrome-mv3`.
-4. On a normal web page, open the toolbar popup and choose **Pick element**. Click the element or press **Esc** to cancel. `Alt+Shift+V` starts the picker from the keyboard.
+**Reset demo** restores the supplied report. **Start for real** discards the demo key before returning home. See [.factory/demo.md](.factory/demo.md) for the sample data and isolation details.
 
-The packaged archive is `.output/viewport-fact-sheet-chrome.zip` and is also copied to `dist/site/downloads/`.
+## Install the extension
 
-## Playwright helper
+1. Run `npm ci && npm run build`.
+2. Open `chrome://extensions` and enable **Developer mode**.
+3. Choose **Load unpacked** and select `.output/chrome-mv3`.
+4. On a page you are allowed to inspect, open the toolbar popup and choose **Pick element**.
+5. Click an element, or press **Esc** to cancel. `Alt+Shift+V` starts picking from the keyboard.
 
-After a build, copy `dist/playwright-helper/index.mjs` into your test project. It is a self-contained helper; `index.d.mts` is optional editor type information for standard NodeNext imports. The site offers `viewport-fact-sheet-playwright.zip` when you want the helper and its type definition together.
+The release archive is `.output/viewport-fact-sheet-chrome.zip`. The deploy build copies it to `dist/site/downloads/`.
+
+## Use the Playwright helper
+
+After a build, copy `dist/playwright-helper/index.mjs` into a test project. The `index.d.mts` file is included in the helper ZIP for NodeNext editor types.
 
 ```ts
 import { getViewportFactSheet, assertViewportReachable } from './index.mjs';
@@ -28,43 +33,40 @@ expect(facts.verdict.reachable).toBe(true);
 await assertViewportReachable(page, '#checkout');
 ```
 
-The helper accepts a CSS selector or Playwright `Locator` and returns the same versioned JSON report as the extension.
+The helper accepts a CSS selector or Playwright `Locator`. It returns a report or throws reason codes when an assertion fails.
 
 ## Develop, test, and build
 
-Requirements: Node.js 20+ and npm.
+Requirements: Node.js 20+, npm, `zip`, `unzip`, and the preinstalled Playwright Chromium browser.
 
 ```bash
-npm install
-npm run dev
+npm ci
+npm run typecheck
 npm run test:unit
-npm run build        # dist/site plus .output/chrome-mv3
-npm run build:site   # complete deployable site, including all downloads
-npm test             # unit tests, clean build, Playwright + axe checks
+npm run build
+npm test
+npm run verify:claims
 ```
 
-`npm run build:site` writes the deployable static site to `dist/site/`, with `index.html` at that root. The full build also places extension and helper downloads there. Publish the complete `dist/site/` directory, including `downloads/`, `_headers`, and `staticwebapp.config.json`, verbatim. The Azure configuration excludes downloads from SPA fallback, assigns their MIME types, and sets the response policies. The browser suite covers 20 seeded layout classifications, desktop and 390 px mobile rendering, legal routes, serious/critical axe findings, console errors, keyboard skip focus, download contents, and privacy-safe reports.
+`npm run build:site` produces the deployable site in `dist/site/`. Deploy that directory verbatim, including `downloads/`, `_headers`, and `staticwebapp.config.json`.
+
+Every public product claim is listed in [.factory/claims.json](.factory/claims.json). Run one claim from a clean checkout with its documented command, for example:
+
+```bash
+npm run test:claims -- --grep @claim:offline-demo
+```
+
+## Privacy and support
+
+The static site uses no cookies or third-party scripts. The extension stores its latest report in local browser extension storage. Read the deployed [privacy policy](https://viewport-fact-sheet.sociobot.in/privacy/) and [terms](https://viewport-fact-sheet.sociobot.in/terms/).
 
 ## Project layout
 
-- `src/inspector.ts` — shared inspection engine
-- `src/injected.ts` — keyboard-accessible page picker
-- `entrypoints/` — WXT MV3 background and popup
+- `src/` — shared inspection engine and picker
+- `entrypoints/` — Manifest V3 popup and background script
 - `playwright-helper/` — Playwright API
-- `site/` — static product, privacy, and terms pages
-- `tests/` — unit and browser checks
-- `.factory/design.md` — visual system and asset provenance
-- `.factory/handoff.md` — verification and known gaps
-
-## Privacy and browser support
-
-V1 targets Chromium Manifest V3. Protected browser pages cannot be inspected. Elements inside cross-origin iframes cannot be selected from the top document.
-
-See the deployed [privacy policy](https://viewport-fact-sheet.sociobot.in/privacy/) and [terms](https://viewport-fact-sheet.sociobot.in/terms/).
-
-## Deployment
-
-Run `npm run build:site`, then deploy the complete `dist/site/` directory as a static site at `https://viewport-fact-sheet.sociobot.in`. The build fails unless all three advertised downloads exist, both ZIPs are valid, and the helper archive contains its NodeNext declaration.
+- `site/` — static site, demo, legal pages, and 404 page
+- `tests/` — unit, browser, artifact, and claim checks
 
 ## License
 

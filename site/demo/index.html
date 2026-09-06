@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#071a2b" />
+  <meta name="description" content="Try a populated Viewport Fact Sheet report with sample layout data." />
+  <link rel="canonical" href="https://viewport-fact-sheet.sociobot.in/demo/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Demo — Viewport Fact Sheet" />
+  <meta property="og:description" content="Try a populated viewport inspection report with sample layout data." />
+  <meta property="og:image" content="https://viewport-fact-sheet.sociobot.in/viewport-fact-sheet-social.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Demo — Viewport Fact Sheet" />
+  <meta name="twitter:description" content="Try a populated viewport inspection report with sample layout data." />
+  <meta name="twitter:image" content="https://viewport-fact-sheet.sociobot.in/viewport-fact-sheet-social.jpg" />
+  <title>Demo — Viewport Fact Sheet</title>
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Viewport Fact Sheet home"><span class="mark" aria-hidden="true"><i></i></span><span>Viewport<br />Fact Sheet</span></a>
+    <nav aria-label="Primary navigation"><a aria-current="page" href="/demo/">Demo</a><a href="/#how-it-works">How it works</a><a href="/privacy/">Privacy</a></nav>
+    <a class="header-download" href="/downloads/viewport-fact-sheet-chrome.zip" download>Download <span aria-hidden="true">↓</span></a>
+  </header>
+  <aside class="demo-banner" aria-label="Demo status"><strong>Demo — sample data, nothing is saved</strong><div><button type="button" id="reset-demo">Reset demo</button><a href="/" id="start-real">Start for real</a></div></aside>
+  <main class="demo-main" id="main" tabindex="-1">
+    <section class="demo-intro" aria-labelledby="demo-title">
+      <p class="section-no">Sample workspace</p>
+      <h1 id="demo-title">Inspect a sample clipped element</h1>
+      <p>Use this report to identify why a checkout panel cannot receive a click.</p>
+    </section>
+    <section class="demo-workspace" aria-labelledby="sample-page-title">
+      <div class="demo-page">
+        <header><span>shop.example.test / checkout</span><span>Sample page</span></header>
+        <div class="demo-canvas">
+          <h2 id="sample-page-title">Checkout drawer</h2>
+          <p>The panel is partly below its scrolling region.</p>
+          <div class="demo-clipper" aria-label="Sample clipping ancestor">
+            <article class="demo-checkout-panel" id="checkout-panel" aria-label="Sample checkout panel"><span>Order summary</span><strong>USD 128.40</strong><button type="button">Pay now</button></article>
+            <div class="demo-sticky-footer" id="sample-sticky-footer">Need help? Contact support</div>
+          </div>
+        </div>
+      </div>
+      <article class="demo-report" aria-labelledby="report-title">
+        <header><div><p class="kicker">Selected target</p><h2 id="report-title"><code>#checkout-panel</code></h2></div><span class="stamp fail" id="report-status">Not reachable</span></header>
+        <p class="demo-report-note" id="report-note" role="status">Sample report loaded from demo storage.</p>
+        <dl><div><dt>Visible area</dt><dd id="visible-area">37%</dd></div><div><dt>Centre hit</dt><dd><code id="centre-hit">#sample-sticky-footer</code></dd></div><div><dt>Border box</dt><dd id="border-box">420 × 288 px</dd></div><div><dt>Clipped by</dt><dd><code id="clipper-name">.demo-clipper</code></dd></div><div><dt>Reason code</dt><dd><code id="reason-code">occluded-at-visible-center</code></dd></div></dl>
+        <div class="finding"><span aria-hidden="true">!</span><div><small>What to fix first</small><strong>Move the panel into the visible scroll range.</strong><p>The sticky footer covers its visible centre.</p></div></div>
+        <button class="button secondary" type="button" id="download-sample">Download sample JSON <span aria-hidden="true">↓</span></button>
+      </article>
+    </section>
+    <section class="demo-explanation" aria-labelledby="demo-explanation-title"><h2 id="demo-explanation-title">What this sample shows</h2><ol><li>The panel extends below its scrolling ancestor.</li><li>Only 37% of the panel is visible.</li><li>The sticky footer wins the centre hit test.</li></ol></section>
+  </main>
+  <footer class="site-footer"><div class="wordmark"><span class="mark" aria-hidden="true"><i></i></span><span>Viewport<br />Fact Sheet</span></div><p>Browser facts for visible layout problems.</p><nav aria-label="Footer navigation"><a href="/demo/">Demo</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-viewport-fact-sheet" rel="noreferrer">Source <span class="sr-only">(opens in a new tab)</span></a></nav><small>Version 1.0.0 · Generated blueprint imagery is disclosed in the design notes. Built by Param Factory.</small></footer>
+  <script type="module" src="/demo.ts"></script>
+</body>
+</html>

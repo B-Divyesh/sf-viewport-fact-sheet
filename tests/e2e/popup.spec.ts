@@ -14,7 +14,7 @@ const populatedReport = {
   diagnostics: Array.from({ length: 48 }, (_, index) => ({ index, explanation: 'A deliberately long but non-sensitive diagnostic value for JSON keyboard scrolling coverage.' })),
 };
 
-test('the packaged popup has valid tabs and keyboard-accessible populated JSON', async () => {
+test('@claim:extension-report-storage keeps the latest report in local extension storage', async () => {
   const profile = await mkdtemp(join(tmpdir(), 'vfs-popup-'));
   const context = await chromium.launchPersistentContext(profile, {
     headless: false,
@@ -24,6 +24,8 @@ test('the packaged popup has valid tabs and keyboard-accessible populated JSON',
   try {
     const worker = context.serviceWorkers()[0] ?? await context.waitForEvent('serviceworker');
     const extensionId = new URL(worker.url()).host;
+    const sample = await context.newPage();
+    await sample.goto('http://127.0.0.1:4173/demo/');
     const popup = await context.newPage();
     await popup.goto(`chrome-extension://${extensionId}/popup.html`);
     await popup.evaluate(async (report) => { await chrome.storage.local.set({ latestReport: report }); }, populatedReport);
